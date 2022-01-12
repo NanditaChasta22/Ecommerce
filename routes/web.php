@@ -2,6 +2,9 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminController\CategoryAdminController;
+use App\Http\Controllers\AdminController\UserAdminController;
+use App\Http\Controllers\AdminController\ProductAdminController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -23,3 +26,7 @@ Route::get('dashboard', function () {
 });
 
 Route::resource('Category','\App\Http\Controllers\AdminController\CategoryAdminController');
+
+Route::resource('User','\App\Http\Controllers\AdminController\UserAdminController');
+
+Route::resource('Product','\App\Http\Controllers\AdminController\ProductAdminController');

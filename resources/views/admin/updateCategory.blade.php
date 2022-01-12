@@ -18,7 +18,7 @@
             </div>
         @endif
 
-    <form class="form-horizontal" action={{route('Category.update', $data->id) }}>
+    <form class="form-horizontal" action="{{route('Category.update', $data->id) }}" method="POST" enctype="multipart/form-data">
         @csrf
         @method('PUT')
 
@@ -44,7 +44,7 @@
         
         <div class="form-group">
             <div class="col-sm-offset-2 col-sm-10">
-            <button type="submit" class="btn btn-default">Submit</button>
+            <center><button type="submit" class="btn btn-success">Update Category</button></center>
             </div>
         </div>
     </form>

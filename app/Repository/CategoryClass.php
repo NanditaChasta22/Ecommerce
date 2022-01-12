@@ -20,9 +20,20 @@ class CategoryClass implements CategoryInterface
         return CategoryModel::create($data);
     }
 
-    public function update($id, array $data)
+    public function show($id)
     {
-        return CategoryModel::find($id)->update($data);
+        return CategoryModel::find($id);
+    }
+
+    public function update($id , array $data)
+    {
+     
+        $update = CategoryModel::findOrFail($id);
+        $update->categoryName = $data['categoryName'];
+        $update->categoryDescription = $data['categoryDescription'];
+        $update->categoryImg = $data['categoryImg'];
+        return $update->save();
+        
     }
 
     public function delete($id)

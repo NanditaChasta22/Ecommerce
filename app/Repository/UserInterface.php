@@ -3,7 +3,7 @@
 namespace App\Repository;
 
 
-interface CategoryInterface 
+interface UserInterface 
 {
     public function all();
 

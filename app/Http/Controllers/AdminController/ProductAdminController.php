@@ -4,29 +4,28 @@ namespace App\Http\Controllers\AdminController;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Repository\CategoryClass;
+use App\Repository\ProductClass;
 
-class CategoryAdminController extends Controller
+class ProductAdminController extends Controller
 {
+
+    protected $product;
+
+    public function __construct(ProductClass $product)
+    {
+        $this->product = $product;
+    }
+
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-
-    protected $category;
-
-    public function __construct(CategoryClass $category)
-    {
-        $this->category = $category;
-    }
-
     public function index()
     {
-        //echo "hello";die;
-        
-        $show = $this->category->all();
-        return view('admin.showCategory',compact('show'));
+        //
+        $show = $this->product->all();
+        return view('admin.showProduct',compact('show'));
     }
 
     /**
@@ -37,7 +36,7 @@ class CategoryAdminController extends Controller
     public function create()
     {
         //
-        return view('admin.addCategory');
+        return view('admin.addProduct');
     }
 
     /**
@@ -50,21 +49,23 @@ class CategoryAdminController extends Controller
     {
         //
         $request->validate([
-            'categoryName' => 'required',
-            'categoryDescription' => 'required',
-            'categoryImg' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'productName' => 'required',
+            'productCategoryId' => 'required',
+            'productPrice' => 'required',
+            'productDescription' => 'required',
+            'productImg' => 'required|image|mimes:jpeg,png,jpg,gif,svg|',
         ]);
   
         $input = $request->all();
   
-        if ($image = $request->file('categoryImg')) {
+        if ($image = $request->file('productImg')) {
             $destinationPath = 'img/images/';
             $profileImage = time(). $image->getClientOriginalExtension();
             $image->move($destinationPath, $profileImage);
-            $input['categoryImg'] = "$profileImage";
+            $input['productImg'] = "$profileImage";
         }
     
-        $this->category->store($input);
+        $this->product->store($input);
         return back()->with('info', 'Add successfully');
     }
 
@@ -77,13 +78,12 @@ class CategoryAdminController extends Controller
     public function show($id)
     {
         //
-         // echo $id;
-        //  $data = CategoryModel::where('id', $id)->get()->first();
-         // echo "<pre>";
-         // print_r($data);
-         // die;
-         $data = $this->category->show($id);
-         return view('admin.CategoryDetail', compact('data'));
+        // $data = CategoryModel::where('id', $id)->get()->first();
+        // echo "<pre>";
+        // print_r($data);
+        // die;
+        $data = $this->product->show($id);
+        return view('admin.ProductDetail', compact('data'));
     }
 
     /**
@@ -95,11 +95,11 @@ class CategoryAdminController extends Controller
     public function edit($id)
     {
         //
-           //
-           $data = $this->category->get($id);
-           //   print_r($data);
-           //   die;
-           return view('admin.updateCategory', compact('data'));
+       // echo "hello";
+        $data = $this->product->get($id);
+        //   print_r($data);
+        //   die;
+        return view('admin.updateProduct', compact('data'));
     }
 
     /**
@@ -112,25 +112,19 @@ class CategoryAdminController extends Controller
     public function update(Request $request, $id)
     {
         //
-        // $collection = [$request->all()];
-        // $collection = [
-        //     'categoryName' => $request->categoryName,
-        //     'categoryDescription' => $request->categoryDescription,
-        //     'categoryImg' => $request->categoryImg,
-        // ];
-        $data = $request->all(['categoryName', 'categoryDescription', 'categoryImg']);
+        $data = $request->all(['productName', 'productCategoryId', 'productPrice', 'productDescription', 'productImg']);
         
       
-        if ($image = $request->file('categoryImg')) {
+        if ($image = $request->file('productImg')) {
             $destinationPath = 'img/images/';
             $profileImage = time(). $image->getClientOriginalExtension();
             $image->move($destinationPath, $profileImage);
-            $data['categoryImg'] = "$profileImage";
+            $data['productImg'] = "$profileImage";
         }
 
-        $this->category->update( $id, $data);
+        $this->product->update($id, $data);
 
-        return redirect('/Category')->with('info', 'Detail has been updated');
+        return redirect('/Product')->with('info', 'Detail has been updated');
     }
 
     /**
@@ -142,7 +136,7 @@ class CategoryAdminController extends Controller
     public function destroy($id)
     {
         //
-        $data = $this->category->delete($id);
+        $data = $this->product->delete($id);
         return back()->with('info','Item deleted successfully!');
     }
 }
